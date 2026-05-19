@@ -4,7 +4,7 @@ WLAN Sensor zur Bodenfeuchte Messung
 Hardware setup
 
 Sensor:
-DFRobot Gravity 
+DFRobot Gravity / AZ-Delivery Bodenfeuchte Sensor Module V1.2
 Analog Ausgang  0 - 3V
 Versorgungsspannung 3,3V - 5.5V DC (5mA)
 Transistor zum ein/aus - Schalten
