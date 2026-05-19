@@ -10,7 +10,7 @@
 
 // ===== Pin-Belegung =====
 #define PIN_SENSOR_POWER 2 // GPIO zum Schalten des Sensors (Transistor)
-#define PIN_SENSOR_ADC 0   // ADC-Eingang Bodenfeuchtesensor
+#define PIN_SENSOR_ADC 13  // ADC-Eingang Bodenfeuchtesensor (GPIO13 / ADC2_CH4)
 #define PIN_BATTERY_ADC 1  // ADC-Eingang Akkuspannung (Spannungsteiler)
 
 // ===== Sensor Konfiguration =====

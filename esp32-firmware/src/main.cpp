@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <driver/gpio.h>
 #include "config.h"
 
 void sendData(float moisture, float batteryVoltage);
@@ -9,12 +10,17 @@ void setup()
 {
     Serial.begin(115200);
 
+    // WiFi explizit deaktivieren vor der Messung (ADC2 Ressourcenkonflikt)
+    WiFi.disconnect(true);
+    WiFi.mode(WIFI_OFF);
+    delay(100);
+
     // Sensor einschalten
     pinMode(PIN_SENSOR_POWER, OUTPUT);
     digitalWrite(PIN_SENSOR_POWER, HIGH);
     delay(SENSOR_WARMUP_MS);
 
-    // Bodenfeuchtigkeit messen
+    // Bodenfeuchtigkeit messen (GPIO13 = ADC2_CH4)
     int rawMoisture = analogRead(PIN_SENSOR_ADC);
     float moisture = rawMoisture * (100.0 / 4095.0); // Prozent (Kalibrierung anpassen!)
 
@@ -24,6 +30,10 @@ void setup()
 
     // Sensor ausschalten
     digitalWrite(PIN_SENSOR_POWER, LOW);
+
+    // GPIO13 sauber deaktivieren bevor WiFi gestartet wird
+    pinMode(PIN_SENSOR_ADC, INPUT);
+    gpio_reset_pin((gpio_num_t)PIN_SENSOR_ADC);
 
     Serial.printf("Feuchte: %.1f%%, Akku: %.2fV\n", moisture, batteryVoltage);
 
