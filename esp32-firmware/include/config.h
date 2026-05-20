@@ -21,4 +21,5 @@
 #define BATTERY_DIVIDER_FACTOR 2.0
 
 // ===== Sleep Konfiguration =====
-#define SLEEP_DURATION_US 3600000000ULL // 1 Stunde in Mikrosekunden
+// #define SLEEP_DURATION_US 3600000000ULL // 1 Stunde in Mikrosekunden
+#define SLEEP_DURATION_US 10000000ULL // 10 Sekunden in Mikrosekunden

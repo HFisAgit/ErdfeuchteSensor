@@ -9,6 +9,7 @@ void sendData(float moisture, float batteryVoltage);
 void setup()
 {
     Serial.begin(115200);
+    Serial.println("Hello World");
 
     // WiFi explizit deaktivieren vor der Messung (ADC2 Ressourcenkonflikt)
     WiFi.disconnect(true);
@@ -18,15 +19,17 @@ void setup()
     // Sensor einschalten
     pinMode(PIN_SENSOR_POWER, OUTPUT);
     digitalWrite(PIN_SENSOR_POWER, HIGH);
+    analogSetPinAttenuation(PIN_SENSOR_ADC, ADC_11db);
     delay(SENSOR_WARMUP_MS);
 
     // Bodenfeuchtigkeit messen (GPIO13 = ADC2_CH4)
     int rawMoisture = analogRead(PIN_SENSOR_ADC);
+    Serial.printf("FeuchteRaw: %d\n", rawMoisture);  // debug: roher ADC-Wert (0-4095) ausgeben
     float moisture = rawMoisture * (100.0 / 4095.0); // Prozent (Kalibrierung anpassen!)
 
     // Akkuspannung messen (über Spannungsteiler)
-    int rawBattery = analogRead(PIN_BATTERY_ADC);
-    float batteryVoltage = rawBattery * (3.3 / 4095.0) * BATTERY_DIVIDER_FACTOR;
+    // int rawBattery = analogRead(PIN_BATTERY_ADC);
+    // float batteryVoltage = rawBattery * (3.3 / 4095.0) * BATTERY_DIVIDER_FACTOR;
 
     // Sensor ausschalten
     digitalWrite(PIN_SENSOR_POWER, LOW);
@@ -35,10 +38,11 @@ void setup()
     pinMode(PIN_SENSOR_ADC, INPUT);
     gpio_reset_pin((gpio_num_t)PIN_SENSOR_ADC);
 
-    Serial.printf("Feuchte: %.1f%%, Akku: %.2fV\n", moisture, batteryVoltage);
+    // Serial.printf("Feuchte: %.1f%%, Akku: %.2fV\n", moisture, batteryVoltage);
+    Serial.printf("Feuchte: %.1f%%\n", moisture);
 
     // WiFi verbinden und Daten senden
-    sendData(moisture, batteryVoltage);
+    sendData(moisture, 0.0);
 
     // DeepSleep bis zur nächsten vollen Stunde
     uint64_t sleepTime = SLEEP_DURATION_US;
