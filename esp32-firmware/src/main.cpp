@@ -25,7 +25,8 @@ void setup()
     // Bodenfeuchtigkeit messen (GPIO13 = ADC2_CH4)
     int rawMoisture = analogRead(PIN_SENSOR_ADC);
     Serial.printf("FeuchteRaw: %d\n", rawMoisture);  // debug: roher ADC-Wert (0-4095) ausgeben
-    float moisture = rawMoisture * (100.0 / 4095.0); // Prozent (Kalibrierung anpassen!)
+    // Kalibrierung: trocken=4095 (0%), nass/Wasser=2150 (100%)
+    float moisture = constrain((4095 - rawMoisture) * (100.0 / (4095 - 2150)), 0.0, 100.0);
 
     // Akkuspannung messen (über Spannungsteiler)
     // int rawBattery = analogRead(PIN_BATTERY_ADC);
